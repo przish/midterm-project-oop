@@ -50,19 +50,16 @@ public class Main {
 
     private static void printMenu() {
         System.out.println();
-        System.out.println("========================================");
-        System.out.println("                 MENU                   ");
-        System.out.println("========================================");
-        System.out.println(" 1 - Add Item");
-        System.out.println(" 2 - Update Item");
-        System.out.println(" 3 - Remove Item");
-        System.out.println(" 4 - Display Items by Category");
-        System.out.println(" 5 - Display All Items");
-        System.out.println(" 6 - Search Item");
-        System.out.println(" 7 - Sort Items");
-        System.out.println(" 8 - Display Low Stock Items");
-        System.out.println(" 9 - Exit");
-        System.out.println("========================================");
+        System.out.println("Menu");
+        System.out.println("1 - Add Item");
+        System.out.println("2 - Update Item");
+        System.out.println("3 - Remove Item");
+        System.out.println("4 - Display Items by Category");
+        System.out.println("5 - Display All Items");
+        System.out.println("6 - Search Item");
+        System.out.println("7 - Sort Items");
+        System.out.println("8 - Display Low Stock Items");
+        System.out.println("9 - Exit");
         System.out.print("Enter choice: ");
     }
 
@@ -70,35 +67,45 @@ public class Main {
 
     // Menu choice: must be a whole number from 1 to 9
     private static int readMenuChoice() {
-        while (true) {
+        boolean isValid = true;
+        int choice = 0;
+        while (isValid) {
             String input = scanner.nextLine().trim();
             try {
-                int choice = Integer.parseInt(input);
+                choice = Integer.parseInt(input);
                 if (choice >= 1 && choice <= 9) {
-                    return choice;
+                    isValid = false;
+                } else {
+                    System.out.print("[ ! ] Invalid choice. Please enter a number from 1 to 9: ");
                 }
-                System.out.print("[ ! ] Invalid choice. Please enter a number from 1 to 9: ");
             } catch (NumberFormatException e) {
                 System.out.print("[ ! ] Invalid input. Please enter a number from 1 to 9: ");
             }
         }
+        return choice;
     }
 
     // Required text field (ID, Name): cannot be blank
     private static String readNonEmptyString(String prompt) {
-        while (true) {
+        boolean isReading = true;
+        String input = "";
+        while (isReading) {
             System.out.print(prompt);
-            String input = scanner.nextLine().trim();
+            input = scanner.nextLine().trim();
             if (!input.isEmpty()) {
-                return input;
+                isReading = false;
+            } else {
+                System.out.println("[ ! ] This field cannot be empty. Please try again.");
             }
-            System.out.println("[ ! ] This field cannot be empty. Please try again.");
         }
+        return input;
     }
 
     // Quantity: must be a whole number, and cannot be negative
     private static int readQuantity(String prompt) {
-        while (true) {
+        boolean isReading = true;
+        int value = 0;
+        while (isReading) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
             try {
@@ -113,23 +120,26 @@ public class Main {
                         continue;
                     }
                 }
-                int value = Integer.parseInt(input.replace(",", ""));
+                value = Integer.parseInt(input.replace(",", ""));
                 if (value < 0) {
                     System.out.println("[ ! ] Quantity cannot be negative. Please try again.");
                     continue;
                 }
-                return value;
+                isReading = false;
             } catch (NumberFormatException e) {
                 System.out.println("[ ! ] Invalid number. Please enter a whole number.");
             }
         }
+        return value;
     }
 
     // Price: must be a number, and must be greater than zero.
     // Supports standard comma thousands separators (e.g., 15,999 or 15,999.50),
     // but rejects invalid comma placements (e.g., 159,99).
     private static double readPrice(String prompt) {
-        while (true) {
+        boolean isReading = true;
+        double value = 0.0;
+        while (isReading) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
             try {
@@ -145,16 +155,17 @@ public class Main {
                     }
                 }
 
-                double value = Double.parseDouble(input.replace(",", ""));
+                value = Double.parseDouble(input.replace(",", ""));
                 if (value <= 0) {
                     System.out.println("[ ! ] Price must be greater than zero. Please try again.");
                     continue;
                 }
-                return value;
+                isReading = false;
             } catch (NumberFormatException e) {
                 System.out.println("[ ! ] Invalid number. Please enter a valid price.");
             }
         }
+        return value;
     }
 
     // Category: required, and must be one of the three that exist.
@@ -166,14 +177,16 @@ public class Main {
         System.out.println(" 1 - Clothing");
         System.out.println(" 2 - Electronics");
         System.out.println(" 3 - Entertainment");
-        String input;
-        while (true) {
+        boolean isReading = true;
+        String input = "";
+        while (isReading) {
             System.out.print(prompt);
             input = scanner.nextLine().trim();
             if (!input.isEmpty()) {
-                break;
+                isReading = false;
+            } else {
+                System.out.println("[ ! ] Category cannot be empty. Please try again.");
             }
-            System.out.println("[ ! ] Category cannot be empty. Please try again.");
         }
 
         if (!inventory.isValidCategory(input)) {
@@ -184,44 +197,59 @@ public class Main {
     }
 
     private static int readUpdateFieldChoice() {
-        while (true) {
+        boolean isChoosing = true;
+        int choice = 0;
+        while (isChoosing) {
             String input = scanner.nextLine().trim();
             if (input.equals("1") || input.equalsIgnoreCase("quantity")) {
-                return 1;
+                choice = 1;
+                isChoosing = false;
+            } else if (input.equals("2") || input.equalsIgnoreCase("price")) {
+                choice = 2;
+                isChoosing = false;
+            } else {
+                System.out.print("[ ! ] Invalid choice. Enter 1 for Quantity or 2 for Price: ");
             }
-            if (input.equals("2") || input.equalsIgnoreCase("price")) {
-                return 2;
-            }
-            System.out.print("[ ! ] Invalid choice. Enter 1 for Quantity or 2 for Price: ");
         }
+        return choice;
     }
 
     private static String readSortBy() {
-        while (true) {
+        boolean isChoosing = true;
+        String sortBy = "";
+        while (isChoosing) {
             System.out.print("Sort by (1 - Quantity, 2 - Price): ");
             String input = scanner.nextLine().trim();
             if (input.equals("1") || input.equalsIgnoreCase("quantity")) {
-                return "Quantity";
+                sortBy = "Quantity";
+                isChoosing = false;
+            } else if (input.equals("2") || input.equalsIgnoreCase("price")) {
+                sortBy = "Price";
+                isChoosing = false;
+            } else {
+                System.out.println("[ ! ] Invalid choice. Please enter 1 for Quantity or 2 for Price.");
             }
-            if (input.equals("2") || input.equalsIgnoreCase("price")) {
-                return "Price";
-            }
-            System.out.println("[ ! ] Invalid choice. Please enter 1 for Quantity or 2 for Price.");
         }
+        return sortBy;
     }
 
     private static boolean readSortOrder() {
-        while (true) {
+        boolean isChoosing = true;
+        boolean ascending = true;
+        while (isChoosing) {
             System.out.print("Order (1 - Ascending, 2 - Descending): ");
             String input = scanner.nextLine().trim();
             if (input.equals("1") || input.equalsIgnoreCase("ascending")) {
-                return true;
+                ascending = true;
+                isChoosing = false;
+            } else if (input.equals("2") || input.equalsIgnoreCase("descending")) {
+                ascending = false;
+                isChoosing = false;
+            } else {
+                System.out.println("[ ! ] Invalid choice. Please enter 1 for Ascending or 2 for Descending.");
             }
-            if (input.equals("2") || input.equalsIgnoreCase("descending")) {
-                return false;
-            }
-            System.out.println("[ ! ] Invalid choice. Please enter 1 for Ascending or 2 for Descending.");
         }
+        return ascending;
     }
 
     // ================= MENU ACTIONS =================
@@ -234,9 +262,11 @@ public class Main {
         }
 
         String id = readNonEmptyString("Enter ID: ");
-        while (inventory.idExists(id)) {
+        boolean isDuplicate = inventory.idExists(id);
+        while (isDuplicate) {
             System.out.println("[ ! ] Item ID " + id + " already exists. Please enter a different ID.");
             id = readNonEmptyString("Enter ID: ");
+            isDuplicate = inventory.idExists(id);
         }
 
         String name = readNonEmptyString("Enter Name: ");
