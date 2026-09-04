@@ -8,22 +8,28 @@ public class Inventory {
 
     public static final String[] CATEGORIES = { "Clothing", "Electronics", "Entertainment" };
 
-    // Validation: is this a real category?
+    // Validation: is this a real category? (Accepts category name or 1-based index: 1, 2, 3)
     public boolean isValidCategory(String category) {
-        for (String c : CATEGORIES) {
-            if (c.equalsIgnoreCase(category)) {
+        if (category == null) {
+            return false;
+        }
+        for (int i = 0; i < CATEGORIES.length; i++) {
+            if (category.equals(String.valueOf(i + 1)) || CATEGORIES[i].equalsIgnoreCase(category)) {
                 return true;
             }
         }
         return false;
     }
 
-    // Returns the properly-capitalized version of a category the user typed,
-    // e.g. "electronics" -> "Electronics"
+    // Returns the properly-capitalized version of a category the user typed or selected,
+    // e.g. "1" -> "Clothing", "electronics" -> "Electronics"
     public String normalizeCategory(String category) {
-        for (String c : CATEGORIES) {
-            if (c.equalsIgnoreCase(category)) {
-                return c;
+        if (category == null) {
+            return category;
+        }
+        for (int i = 0; i < CATEGORIES.length; i++) {
+            if (category.equals(String.valueOf(i + 1)) || CATEGORIES[i].equalsIgnoreCase(category)) {
+                return CATEGORIES[i];
             }
         }
         return category;
