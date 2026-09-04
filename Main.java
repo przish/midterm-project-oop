@@ -102,7 +102,18 @@ public class Main {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
             try {
-                int value = Integer.parseInt(input);
+                if (input.contains(",")) {
+                    if (!input.matches("^[0-9]{1,3}(,[0-9]{3})+$")) {
+                        System.out.println("[ ! ] Invalid quantity format. Please enter a whole number (e.g., 10 or 1,000).");
+                        continue;
+                    }
+                } else {
+                    if (!input.matches("^-?[0-9]+$")) {
+                        System.out.println("[ ! ] Invalid number. Please enter a whole number.");
+                        continue;
+                    }
+                }
+                int value = Integer.parseInt(input.replace(",", ""));
                 if (value < 0) {
                     System.out.println("[ ! ] Quantity cannot be negative. Please try again.");
                     continue;
@@ -114,13 +125,27 @@ public class Main {
         }
     }
 
-    // Price: must be a number, and must be greater than zero
+    // Price: must be a number, and must be greater than zero.
+    // Supports standard comma thousands separators (e.g., 15,999 or 15,999.50),
+    // but rejects invalid comma placements (e.g., 159,99).
     private static double readPrice(String prompt) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
             try {
-                double value = Double.parseDouble(input);
+                if (input.contains(",")) {
+                    if (!input.matches("^[0-9]{1,3}(,[0-9]{3})+(\\.[0-9]+)?$")) {
+                        System.out.println("[ ! ] Invalid price format. Please enter a valid price (e.g., 250 or 15,999).");
+                        continue;
+                    }
+                } else {
+                    if (!input.matches("^[0-9]+(\\.[0-9]+)?$")) {
+                        System.out.println("[ ! ] Invalid number. Please enter a valid price.");
+                        continue;
+                    }
+                }
+
+                double value = Double.parseDouble(input.replace(",", ""));
                 if (value <= 0) {
                     System.out.println("[ ! ] Price must be greater than zero. Please try again.");
                     continue;
@@ -133,9 +158,14 @@ public class Main {
     }
 
     // Category: required, and must be one of the three that exist.
+    // Displays numeric choices and accepts either number (1-3) or name.
     // Returns null (after printing the required message) if the category
     // doesn't exist, or the properly-capitalized category name if it does.
     private static String readCategoryOrNull(String prompt) {
+        System.out.println("Categories:");
+        System.out.println(" 1 - Clothing");
+        System.out.println(" 2 - Electronics");
+        System.out.println(" 3 - Entertainment");
         String input;
         while (true) {
             System.out.print(prompt);
@@ -168,26 +198,29 @@ public class Main {
 
     private static String readSortBy() {
         while (true) {
-            System.out.print("Sort by (Quantity/Price): ");
+            System.out.print("Sort by (1 - Quantity, 2 - Price): ");
             String input = scanner.nextLine().trim();
-            if (input.equalsIgnoreCase("quantity") || input.equalsIgnoreCase("price")) {
-                return input;
+            if (input.equals("1") || input.equalsIgnoreCase("quantity")) {
+                return "Quantity";
             }
-            System.out.println("[ ! ] Invalid input. Please enter Quantity or Price.");
+            if (input.equals("2") || input.equalsIgnoreCase("price")) {
+                return "Price";
+            }
+            System.out.println("[ ! ] Invalid choice. Please enter 1 for Quantity or 2 for Price.");
         }
     }
 
     private static boolean readSortOrder() {
         while (true) {
-            System.out.print("Order (Ascending/Descending): ");
+            System.out.print("Order (1 - Ascending, 2 - Descending): ");
             String input = scanner.nextLine().trim();
-            if (input.equalsIgnoreCase("ascending")) {
+            if (input.equals("1") || input.equalsIgnoreCase("ascending")) {
                 return true;
             }
-            if (input.equalsIgnoreCase("descending")) {
+            if (input.equals("2") || input.equalsIgnoreCase("descending")) {
                 return false;
             }
-            System.out.println("[ ! ] Invalid input. Please enter Ascending or Descending.");
+            System.out.println("[ ! ] Invalid choice. Please enter 1 for Ascending or 2 for Descending.");
         }
     }
 
@@ -195,7 +228,7 @@ public class Main {
 
     private static void addItem() {
         System.out.println("\n----- ADD ITEM -----");
-        String category = readCategoryOrNull("Enter Category (Clothing/Electronics/Entertainment): ");
+        String category = readCategoryOrNull("Enter Category (1-3): ");
         if (category == null) {
             return;
         }
@@ -233,7 +266,7 @@ public class Main {
             return;
         }
 
-        System.out.print("\nUpdate (1) Quantity or (2) Price? ");
+        System.out.print("\nUpdate (1 - Quantity, 2 - Price): ");
         int fieldChoice = readUpdateFieldChoice();
 
         if (fieldChoice == 1) {
@@ -267,7 +300,7 @@ public class Main {
 
     private static void displayByCategory() {
         System.out.println("\n----- DISPLAY ITEMS BY CATEGORY -----");
-        String category = readCategoryOrNull("Enter Category (Clothing/Electronics/Entertainment): ");
+        String category = readCategoryOrNull("Enter Category (1-3): ");
         if (category == null) {
             return;
         }
