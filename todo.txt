@@ -1,63 +1,85 @@
 Create an inventory management system that uses 
-TODO: encapsulation and 
-TODO: abstraction concepts. 
+[x] COMPLETED: encapsulation and 
+[x] COMPLETED: abstraction concepts. 
 
 This project should allow users to manage items in a store's inventory. These includes: Add Item, Update Item (either Quantity or Price), Remove Item, Display Items by Category, Display All Items, Search Item, Sort Items (either by Quantity or Price, and Ascending or Descending), and Display Low Stock Items. 
 
-TODO: Each item should have details like: 
+[x] COMPLETED: Each item should have details like: 
     o ID
     o name
     o quantity
     o price
 
-TODO: There should be three categories for the items: 
+[x] COMPLETED: There should be three categories for the items: 
     o Clothing
     o Electronics
     o Entertainment
 
-TODO: Your Java file must be put in GitHub. Submit here the repository link. The repository name is: midterm-project-oop.
+[x] COMPLETED: Your Java file must be put in GitHub. Submit here the repository link. The repository name is: midterm-project-oop.
 
-TODO: Include ALL Types of Validations!
+[x] COMPLETED: Include ALL Types of Validations!
+    o Non-empty string validation for ID and Name
+    o Duplicate item ID check when adding items
+    o Non-negative integer validation for Quantity (supports commas, e.g. 1,000)
+    o Positive number validation for Price (supports standard commas, e.g. 15,999; rejects invalid groupings like 159,99)
+    o Valid category validation by name or number (1 - Clothing, 2 - Electronics, 3 - Entertainment)
+    o Valid menu choice validation (1 to 9)
+    o Valid sub-choice selections (Quantity/Price, Ascending/Descending) by number or name
+    o No while(true) loops used (all loops use boolean flag variables: variable = true, while([variable]))
 
 There will be an individual presentation of your project on midterm week.
 
 Requirements:
-TODO: Add Item
-        o Input Category
+[x] COMPLETED: Add Item
+        o Input Category (accepts 1 - Clothing, 2 - Electronics, 3 - Entertainment, or full name)
         o If category is found, input ID (string), Name (string), Quantity (int), Price (float / double)
         o After input, it should display 'Item added successfully!'
         o If category is not found, display 'Category <input-value> does not exist!'
         o Return to Main Menu after adding an item successfully
-TODO: Update Item
+[x] COMPLETED: Update Item
         o Input ID first
         o If ID is found, user will input if quantity or price, then input the new value. Then display 'Quantity / Price of Item <name> is
         updated from <old-value> to <new-value>'
         o If ID is not found, display 'Item not found!'
         o Return to Main Menu after updating an item successfully
-TODO: Remove Item
+[x] COMPLETED: Remove Item
         o Input ID
         o If ID is found, display 'Item <name> has been removed from the inventory'
         o If ID is not found, display 'Item not found!'
-TODO: Display Items by Category
+[x] COMPLETED: Display Items by Category
         o Input Category
         o If Category is existing, then display the items in a table format (ID, Name, Quantity, Price are the columns)
         o If Category is not found, display 'Category <input-value> does not exist!'
-TODO: Display All Items
+[x] COMPLETED: Display All Items
         o Displays the items in a table format (ID, Name, Quantity, Price, Category are the columns)
-TODO: Search Item
+[x] COMPLETED: Search Item
         o Input ID
         o If ID is found, display the item details
         o If ID is not found, should display 'Item not found!'
-TODO: Sort Items
-        o Input if sort by quantity or price, then input if ascending or descending
+[x] COMPLETED: Sort Items
+        o Input if sort by quantity or price, then input if ascending or descending (supports 1/2 numeric selection)
         o Display the items in a table format (ID, Name, Quantity, Price, Category are the columns)
-TODO: Display Low Stock Items
+[x] COMPLETED: Display Low Stock Items
         o Display all the items that has a quantity of 5 and below
         o It should be displayed in a table format (ID, Name, Quantity, Price, Category are the columns)
-TODO: Exit
+[x] COMPLETED: Exit
+        o Option 9 exits the program cleanly
+
+Sample Menu:
+Menu
+1 - Add Item
+2 - Update Item
+3 - Remove Item
+4 - Display Items by Category
+5 - Display All Items
+6 - Search Item
+7 - Sort Items
+8 - Display Low Stock Items
+9 - Exit
 
 Rubric:
     • Quality of Code - 30 points
     • Output - 40 points
     • Q & A - 20 points
     • GitHub - 10 points
+Total of 100 points
