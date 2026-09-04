@@ -50,16 +50,19 @@ public class Main {
 
     private static void printMenu() {
         System.out.println();
-        System.out.println("Menu");
-        System.out.println("1 - Add Item");
-        System.out.println("2 - Update Item");
-        System.out.println("3 - Remove Item");
-        System.out.println("4 - Display Items by Category");
-        System.out.println("5 - Display All Items");
-        System.out.println("6 - Search Item");
-        System.out.println("7 - Sort Items");
-        System.out.println("8 - Display Low Stock Items");
-        System.out.println("9 - Exit");
+        System.out.println("========================================");
+        System.out.println("                 MENU                   ");
+        System.out.println("========================================");
+        System.out.println(" 1 - Add Item");
+        System.out.println(" 2 - Update Item");
+        System.out.println(" 3 - Remove Item");
+        System.out.println(" 4 - Display Items by Category");
+        System.out.println(" 5 - Display All Items");
+        System.out.println(" 6 - Search Item");
+        System.out.println(" 7 - Sort Items");
+        System.out.println(" 8 - Display Low Stock Items");
+        System.out.println(" 9 - Exit");
+        System.out.println("========================================");
         System.out.print("Enter choice: ");
     }
 
@@ -111,7 +114,8 @@ public class Main {
             try {
                 if (input.contains(",")) {
                     if (!input.matches("^[0-9]{1,3}(,[0-9]{3})+$")) {
-                        System.out.println("[ ! ] Invalid quantity format. Please enter a whole number (e.g., 10 or 1,000).");
+                        System.out.println(
+                                "[ ! ] Invalid quantity format. Please enter a whole number (e.g., 10 or 1,000).");
                         continue;
                     }
                 } else {
@@ -145,7 +149,8 @@ public class Main {
             try {
                 if (input.contains(",")) {
                     if (!input.matches("^[0-9]{1,3}(,[0-9]{3})+(\\.[0-9]+)?$")) {
-                        System.out.println("[ ! ] Invalid price format. Please enter a valid price (e.g., 250 or 15,999).");
+                        System.out.println(
+                                "[ ! ] Invalid price format. Please enter a valid price (e.g., 250 or 15,999).");
                         continue;
                     }
                 } else {
@@ -435,7 +440,8 @@ public class Main {
         printSeparator(86);
         for (Item item : items) {
             System.out.printf("%-12s %-26s %-14s %-14s %-16s%n",
-                    item.getId(), item.getName(), formatQuantity(item.getQuantity()), formatPrice(item.getPrice()), item.getCategory());
+                    item.getId(), item.getName(), formatQuantity(item.getQuantity()), formatPrice(item.getPrice()),
+                    item.getCategory());
         }
         printSeparator(86);
 
