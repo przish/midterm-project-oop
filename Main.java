@@ -88,7 +88,7 @@ public class Main {
         return choice;
     }
 
-    // Required text field (ID, Name): cannot be blank
+    // Required text field (ID): cannot be blank
     private static String readNonEmptyString(String prompt) {
         boolean isReading = true;
         String input = "";
@@ -104,7 +104,44 @@ public class Main {
         return input;
     }
 
-    // Quantity: must be a whole number, and cannot be negative
+    // Item name: required, must contain at least one letter,
+    // cannot be solely symbols/numbers/gibberish, and must contain valid characters
+    private static String readItemName(String prompt) {
+        boolean isReading = true;
+        String input = "";
+        while (isReading) {
+            System.out.print(prompt);
+            input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                System.out.println("[ ! ] This field cannot be empty. Please try again.");
+                continue;
+            }
+
+            if (!input.matches(".*[a-zA-Z].*")) {
+                System.out.println(
+                        "[ ! ] Item name must contain at least one letter and cannot be solely symbols or numbers.");
+                continue;
+            }
+
+            if (!input.matches("^[a-zA-Z0-9\\s.,'\"()&/+\\-%#:]+$")) {
+                System.out.println(
+                        "[ ! ] Item name contains invalid characters. Only letters, numbers, spaces, and standard punctuation are allowed.");
+                continue;
+            }
+
+            if (input.length() > Item.MAX_NAME_LENGTH) {
+                System.out.printf("[ ! ] Item name cannot exceed %d characters. Please try again.%n",
+                        Item.MAX_NAME_LENGTH);
+                continue;
+            }
+
+            isReading = false;
+        }
+        return input;
+    }
+
+    // Quantity: must be a whole number, cannot be negative, and cannot exceed MAX_QUANTITY
     private static int readQuantity(String prompt) {
         boolean isReading = true;
         int value = 0;
@@ -113,7 +150,7 @@ public class Main {
             String input = scanner.nextLine().trim();
             try {
                 if (input.contains(",")) {
-                    if (!input.matches("^[0-9]{1,3}(,[0-9]{3})+$")) {
+                    if (!input.matches("^-?[0-9]{1,3}(,[0-9]{3})+$")) {
                         System.out.println(
                                 "[ ! ] Invalid quantity format. Please enter a whole number (e.g., 10 or 1,000).");
                         continue;
@@ -124,11 +161,25 @@ public class Main {
                         continue;
                     }
                 }
-                value = Integer.parseInt(input.replace(",", ""));
-                if (value < 0) {
+
+                long rawValue;
+                try {
+                    rawValue = Long.parseLong(input.replace(",", ""));
+                } catch (NumberFormatException e) {
+                    System.out.printf("[ ! ] Quantity cannot exceed %,d (number is too large). Please try again.%n",
+                            Item.MAX_QUANTITY);
+                    continue;
+                }
+
+                if (rawValue < 0) {
                     System.out.println("[ ! ] Quantity cannot be negative. Please try again.");
                     continue;
                 }
+                if (rawValue > Item.MAX_QUANTITY) {
+                    System.out.printf("[ ! ] Quantity cannot exceed %,d. Please try again.%n", Item.MAX_QUANTITY);
+                    continue;
+                }
+                value = (int) rawValue;
                 isReading = false;
             } catch (NumberFormatException e) {
                 System.out.println("[ ! ] Invalid number. Please enter a whole number.");
@@ -137,7 +188,7 @@ public class Main {
         return value;
     }
 
-    // Price: must be a number, and must be greater than zero.
+    // Price: must be a number, greater than zero, and cannot exceed MAX_PRICE.
     // Supports standard comma thousands separators (e.g., 15,999 or 15,999.50),
     // but rejects invalid comma placements (e.g., 159,99).
     private static double readPrice(String prompt) {
@@ -148,21 +199,31 @@ public class Main {
             String input = scanner.nextLine().trim();
             try {
                 if (input.contains(",")) {
-                    if (!input.matches("^[0-9]{1,3}(,[0-9]{3})+(\\.[0-9]+)?$")) {
+                    if (!input.matches("^-?[0-9]{1,3}(,[0-9]{3})+(\\.[0-9]+)?$")) {
                         System.out.println(
                                 "[ ! ] Invalid price format. Please enter a valid price (e.g., 250 or 15,999).");
                         continue;
                     }
                 } else {
-                    if (!input.matches("^[0-9]+(\\.[0-9]+)?$")) {
+                    if (!input.matches("^-?[0-9]+(\\.[0-9]+)?$")) {
                         System.out.println("[ ! ] Invalid number. Please enter a valid price.");
                         continue;
                     }
                 }
 
-                value = Double.parseDouble(input.replace(",", ""));
+                try {
+                    value = Double.parseDouble(input.replace(",", ""));
+                } catch (NumberFormatException e) {
+                    System.out.printf("[ ! ] Price is too large. Maximum allowed is %,.2f.%n", Item.MAX_PRICE);
+                    continue;
+                }
+
                 if (value <= 0) {
                     System.out.println("[ ! ] Price must be greater than zero. Please try again.");
+                    continue;
+                }
+                if (Double.isInfinite(value) || Double.isNaN(value) || value > Item.MAX_PRICE) {
+                    System.out.printf("[ ! ] Price cannot exceed %,.2f. Please try again.%n", Item.MAX_PRICE);
                     continue;
                 }
                 isReading = false;
@@ -274,7 +335,7 @@ public class Main {
             isDuplicate = inventory.idExists(id);
         }
 
-        String name = readNonEmptyString("Enter Name: ");
+        String name = readItemName("Enter Name: ");
         int quantity = readQuantity("Enter Quantity: ");
         double price = readPrice("Enter Price: ");
 
