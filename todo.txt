@@ -20,8 +20,8 @@ This project should allow users to manage items in a store's inventory. These in
 [x] COMPLETED: Include ALL Types of Validations!
     o Non-empty and non-negative string validation for ID and format/character validation for Name (must contain letters, cannot be solely symbols or gibberish, max 60 chars)
     o Duplicate item ID check when adding items
-    o Non-negative integer validation for Quantity with upper bound check (supports commas, e.g. 1,000; guards against overflow and max 1,000,000)
-    o Positive number validation for Price with upper bound check (supports standard commas, e.g. 15,999; rejects invalid groupings like 159,99; guards against overflow/infinity and max 10,000,000.00)
+    o Non-negative integer validation for Quantity with realistic upper bound check (supports commas, e.g. 1,000; guards against overflow and max 10,000)
+    o Positive number validation for Price with realistic upper bound check (supports standard commas, e.g. 15,999; rejects invalid groupings like 159,99; guards against overflow/infinity and max 500,000.00)
     o Valid category validation by name or number (1 - Clothing, 2 - Electronics, 3 - Entertainment)
     o Valid menu choice validation (1 to 9)
     o Valid sub-choice selections (Quantity/Price, Ascending/Descending) by number or name
@@ -53,9 +53,9 @@ Requirements:
 [x] COMPLETED: Display All Items
         o Displays the items in a table format (ID, Name, Quantity, Price, Category are the columns)
 [x] COMPLETED: Search Item
-        o Input ID
-        o If ID is found, display the item details
-        o If ID is not found, should display 'Item not found!'
+        o Input ID or Name (supports whitespace-normalized name search where e.g. 'Pen 15' matches 'Pen  15')
+        o If item is found, display the item details (supports multiple matches across different IDs)
+        o If not found, display 'Item not found!'
 [x] COMPLETED: Sort Items
         o Input if sort by quantity or price, then input if ascending or descending (supports 1/2 numeric selection)
         o Display the items in a table format (ID, Name, Quantity, Price, Category are the columns)
