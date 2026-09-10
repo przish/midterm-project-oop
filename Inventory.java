@@ -53,6 +53,43 @@ public class Inventory {
         return null;
     }
 
+    // Normalizes text by trimming and collapsing multiple spaces into a single space
+    public static String normalizeWhitespace(String text) {
+        if (text == null) {
+            return "";
+        }
+        return text.trim().replaceAll("\\s+", " ");
+    }
+
+    // Searches for items by ID first, then by Name with whitespace normalized.
+    // e.g., searching for "Pen 15" matches "Pen  15", returning any items matching that name even if they have different IDs.
+    public List<Item> search(String query) {
+        List<Item> results = new ArrayList<>();
+        if (query == null || query.trim().isEmpty()) {
+            return results;
+        }
+
+        String trimmedQuery = query.trim();
+        String normalizedQuery = normalizeWhitespace(trimmedQuery);
+
+        // 1. Check exact match by ID first
+        Item byId = findById(trimmedQuery);
+        if (byId != null) {
+            results.add(byId);
+            return results;
+        }
+
+        // 2. Search by Name with normalized whitespace (case-insensitive)
+        for (Item item : items) {
+            String normalizedItemName = normalizeWhitespace(item.getName());
+            if (normalizedItemName.equalsIgnoreCase(normalizedQuery)) {
+                results.add(item);
+            }
+        }
+
+        return results;
+    }
+
     public boolean removeItem(String id) {
         Item item = findById(id);
         if (item == null) {
