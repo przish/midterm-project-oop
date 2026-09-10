@@ -1,8 +1,8 @@
 public abstract class Item {
 
     public static final int MAX_NAME_LENGTH = 60;
-    public static final int MAX_QUANTITY = 1_000_000;
-    public static final double MAX_PRICE = 10_000_000.0;
+    public static final int MAX_QUANTITY = 10_000;
+    public static final double MAX_PRICE = 500_000.0;
 
     private String id;
     private String name;
