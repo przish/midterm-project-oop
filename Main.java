@@ -428,20 +428,22 @@ public class Main {
 
     private static void searchItem() {
         System.out.println("\n----- SEARCH ITEM -----");
-        String id = readNonEmptyString("Enter ID: ");
-        Item item = inventory.findById(id);
+        String query = readNonEmptyString("Enter ID or Name: ");
+        List<Item> results = inventory.search(query);
 
-        if (item == null) {
+        if (results.isEmpty()) {
             System.out.println("\n[ ! ] Item not found!");
             return;
         }
 
-        System.out.println();
-        System.out.println("ID:       " + item.getId());
-        System.out.println("Name:     " + item.getName());
-        System.out.println("Quantity: " + formatQuantity(item.getQuantity()));
-        System.out.println("Price:    " + formatPrice(item.getPrice()));
-        System.out.println("Category: " + item.getCategory());
+        for (Item item : results) {
+            System.out.println();
+            System.out.println("ID:       " + item.getId());
+            System.out.println("Name:     " + item.getName());
+            System.out.println("Quantity: " + formatQuantity(item.getQuantity()));
+            System.out.println("Price:    " + formatPrice(item.getPrice()));
+            System.out.println("Category: " + item.getCategory());
+        }
     }
 
     private static void sortItems() {
