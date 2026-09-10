@@ -13,6 +13,9 @@ public abstract class Item {
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Item ID cannot be empty.");
         }
+        if (id.trim().startsWith("-")) {
+            throw new IllegalArgumentException("Item ID cannot be negative.");
+        }
         this.id = id.trim();
         setName(name);
         setQuantity(quantity);
