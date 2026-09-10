@@ -88,20 +88,26 @@ public class Main {
         return choice;
     }
 
-    // Required text field (ID): cannot be blank
-    private static String readNonEmptyString(String prompt) {
+    // Required text field (ID): cannot be blank and cannot be negative
+    private static String readId(String prompt) {
         boolean isReading = true;
         String input = "";
         while (isReading) {
             System.out.print(prompt);
             input = scanner.nextLine().trim();
-            if (!input.isEmpty()) {
-                isReading = false;
-            } else {
+            if (input.isEmpty()) {
                 System.out.println("[ ! ] This field cannot be empty. Please try again.");
+            } else if (input.startsWith("-")) {
+                System.out.println("[ ! ] ID cannot be negative. Please try again.");
+            } else {
+                isReading = false;
             }
         }
         return input;
+    }
+
+    private static String readNonEmptyString(String prompt) {
+        return readId(prompt);
     }
 
     // Item name: required, must contain at least one letter,
