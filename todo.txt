@@ -18,10 +18,10 @@ This project should allow users to manage items in a store's inventory. These in
 [x] COMPLETED: Your Java file must be put in GitHub. Submit here the repository link. The repository name is: midterm-project-oop.
 
 [x] COMPLETED: Include ALL Types of Validations!
-    o Non-empty string validation for ID and Name
+    o Non-empty string validation for ID and format/character validation for Name (must contain letters, cannot be solely symbols or gibberish, max 60 chars)
     o Duplicate item ID check when adding items
-    o Non-negative integer validation for Quantity (supports commas, e.g. 1,000)
-    o Positive number validation for Price (supports standard commas, e.g. 15,999; rejects invalid groupings like 159,99)
+    o Non-negative integer validation for Quantity with upper bound check (supports commas, e.g. 1,000; guards against overflow and max 1,000,000)
+    o Positive number validation for Price with upper bound check (supports standard commas, e.g. 15,999; rejects invalid groupings like 159,99; guards against overflow/infinity and max 10,000,000.00)
     o Valid category validation by name or number (1 - Clothing, 2 - Electronics, 3 - Entertainment)
     o Valid menu choice validation (1 to 9)
     o Valid sub-choice selections (Quantity/Price, Ascending/Descending) by number or name
